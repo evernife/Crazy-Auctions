@@ -25,9 +25,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.10.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -85,7 +85,7 @@
                     </artifactSet>
                     <!--<finalName>${project.artifactId}[v${project.version}]</finalName>-->
                     <!--<outputFile>/Users/badbones/Desktop/Stuff/Server/plugins/Crazy Auctions[v${project.version}].jar</outputFile>-->
-                    <outputFile>/Users/badbones/Plugins/Public Plugins/Crazy Auctions/Crazy Auctions[v${project.version}].jar</outputFile>
+                    <outputFile>shadedjar/Crazy Auctions[v${project.version}].jar</outputFile>
                 </configuration>
                 <executions>
                     <execution>
