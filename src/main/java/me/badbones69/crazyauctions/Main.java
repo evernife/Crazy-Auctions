@@ -20,6 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class Main extends JavaPlugin implements Listener {
@@ -231,12 +232,15 @@ public class Main extends JavaPlugin implements Listener {
 								}
 							}
 						}
-						for(String id : Files.CONFIG.getFile().getStringList("Settings.BlackList")) {
-							if(item.getType() == Methods.makeItem(id, 1).getType()) {
-								player.sendMessage(Messages.ITEM_BLACKLISTED.getMessage());
-								return true;
-							}
-						}
+                        if (Files.CONFIG.getFile().getBoolean("BlackListByMaterialName.enabled",false)){
+                            String itemMaterialType = item.getType().name();
+                            int itemDamage = item.getDurability();
+                            if (FileManager.restrictedMaterials.contains(itemMaterialType + ":" + itemDamage)
+                                || FileManager.restrictedMaterials.contains(itemMaterialType + ":-1")){
+                                player.sendMessage(Messages.ITEM_BLACKLISTED.getMessage());
+                                return true;
+                            }
+                        }
 						if(!Files.CONFIG.getFile().getBoolean("Settings.Allow-Damaged-Items")) {
 							for(Material i : getDamageableItems()) {
 								if(item.getType() == i) {

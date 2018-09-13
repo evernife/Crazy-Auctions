@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -38,6 +39,9 @@ public class FileManager {
 	 * Sets up the plugin and loads all necessary files.
 	 * @param plugin The plugin this is getting loading for.
 	 */
+
+	public static List<String> restrictedMaterials;
+
 	public FileManager setup(Plugin plugin) {
 		prefix = "[" + plugin.getName() + "] ";
 		this.plugin = plugin;
@@ -107,6 +111,15 @@ public class FileManager {
 				}
 			}
 			if(log) System.out.println(prefix + "Finished loading custom files.");
+		}
+
+
+		restrictedMaterials.clear();
+		for (String itemMaterial : Files.CONFIG.getFile().getStringList("BlackListByMaterialName.items")){
+			if (!itemMaterial.contains(":")){
+				itemMaterial = itemMaterial + ":0";
+			}
+			restrictedMaterials.add(itemMaterial.toUpperCase());
 		}
 		return this;
 	}
