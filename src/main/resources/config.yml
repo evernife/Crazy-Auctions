@@ -335,10 +335,10 @@ Settings:
         Name: '&bBid Now'
         Lore:
         - '&7Click here to Bid Now.'
-  BlackListByMaterialName: #See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html for Materials Names
-    enabled: false
+  BlackListByMaterialName: #See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html for Materials Names or use the command   /ah BlacklistHand
+    enabled: true
     items:
-    - 'LOG:-1' #This will ban all Logs
-    - 'WOOL:3' #This will ban only the WHOOL with damage equals to 3
-    - 'OBSIDIAN' #This will ban obsidian
-    - 'DIAMOND_SWORD' #This will ban diamond sword
+    #- 'LOG:-1' This will ban all Logs
+    #- 'WOOL:3' #This will ban only the WHOOL with damage equals to 3
+    #- 'OBSIDIAN' #This will ban obsidian
+    #- 'DIAMOND_SWORD' #This will ban diamond sword

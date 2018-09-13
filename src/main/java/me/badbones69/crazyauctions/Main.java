@@ -5,6 +5,7 @@ import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.events.AuctionListEvent;
 import me.badbones69.crazyauctions.controllers.GUI;
 import me.badbones69.crazyauctions.currency.Vault;
+import me.badbones69.crazyauctions.version.VersionChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -27,9 +28,14 @@ public class Main extends JavaPlugin implements Listener {
 	
 	public static FileManager fileManager = FileManager.getInstance();
 	public static CrazyAuctions crazyAuctions = CrazyAuctions.getInstance();
+	public static Main instace;
 	
 	@Override
 	public void onEnable() {
+	    //
+        instace = this;
+        VersionChecker.initialize();
+        //
 		saveDefaultConfig();
 		fileManager.logInfo(true).setup(this);
 		crazyAuctions.loadCrazyAuctions();
@@ -121,6 +127,47 @@ public class Main extends JavaPlugin implements Listener {
 					GUI.openPlayersCurrentList(player, 1);
 					return true;
 				}
+                if (args[0].equalsIgnoreCase("BlacklistHand")) {
+                    if ( !(sender instanceof Player)){
+                        sender.sendMessage("Apenas jogadores físicos podem usar esse comando.");
+                        return true;
+                    }
+
+                    Player player = (Player) sender;
+
+                    ItemStack heldItem;
+
+                    if (VersionChecker.getCurrent().isHigher(VersionChecker.Version.v1_8_R1)){
+                        heldItem = player.getInventory().getItemInMainHand();
+                    }else {
+                        heldItem = player.getItemInHand();
+                    }
+
+                    if (heldItem == null){
+                        sender.sendMessage("§cVocê precisa estar segurando um item!");
+                        return true;
+                    }
+
+                    String itemBukktiName = heldItem.getType().name();
+                    int itemDamage = heldItem.getDurability();
+
+                    String resultString;
+                    if ((args.length > 1 && args[1].equalsIgnoreCase("any"))){
+                        resultString = itemBukktiName + ":-1";
+                    }else {
+                        resultString = itemBukktiName + ":" + itemDamage;
+                    }
+
+                    if (!FileManager.restrictedMaterials.contains(resultString)){
+                        FileManager.restrictedMaterials.add(resultString);
+                        Files.CONFIG.getFile().set("BlackListByMaterialName.items",FileManager.restrictedMaterials);
+                        Files.CONFIG.saveFile();
+                        sender.sendMessage("§a§l(+)§r§2 " + resultString);
+                    }else {
+                        sender.sendMessage("§a§l(?)§r§6 " + resultString + "   §7§oJá fazia parte da blacklist");
+                    }
+                    return true;
+                }
 				if(args[0].equalsIgnoreCase("Sell") || args[0].equalsIgnoreCase("Bid")) {// /CA Sell/Bid <Price> [Amount of Items]
 					if(!(sender instanceof Player)) {
 						sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
